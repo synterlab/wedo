@@ -254,10 +254,10 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
         <!-- Hero -->
         <div style="padding:16px 16px 10px;text-align:center">
           <h1 class="hd" style="font-size:clamp(2rem,9vw,2.8rem);font-weight:700;letter-spacing:-.02em;background:linear-gradient(135deg,#fff 0%,#d8b4fe 45%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:5px">WEDO</h1>
-          <p style="font-size:12px;color:rgba(216,180,254,.5);margin-bottom:16px">Jatuhkan bola energi · temukan aset tersembunyi</p>
+          <p style="font-size:12px;color:rgba(216,180,254,.5);margin-bottom:16px">Drop your energy sphere · discover hidden assets</p>
           <div style="position:relative;display:inline-block">
             <button id="drop-btn" class="btn-drop" onclick="triggerDrop()">
-              <span id="drop-icon">⚡</span><span id="drop-txt">MULAI DROP</span>
+              <span id="drop-icon">⚡</span><span id="drop-txt">START DROP</span>
             </button>
             <span id="streak-badge" class="streak-badge" style="display:none"></span>
           </div>
@@ -270,7 +270,7 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
             <div id="st-drops" class="hd" style="font-size:19px;font-weight:700;color:#d8b4fe">—</div>
           </div>
           <div class="scard" style="text-align:center">
-            <div style="font-size:9px;color:rgba(216,180,254,.42);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Ditemukan</div>
+            <div style="font-size:9px;color:rgba(216,180,254,.42);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Found</div>
             <div id="st-disc" class="hd" style="font-size:19px;font-weight:700;color:#d8b4fe">—</div>
           </div>
           <div class="scard" style="text-align:center">
@@ -336,14 +336,14 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
     <!-- ── INVENTORY ── -->
     <div id="page-inventory" class="page">
       <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
-        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Koleksiku</h2>
-        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">Aset yang berhasil kamu temukan lewat drop</p>
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">My Collection</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">Assets you've discovered through drops</p>
         <div id="inv-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px"></div>
         <div id="inv-empty" style="text-align:center;padding:50px 20px">
           <div style="font-size:50px;margin-bottom:12px;animation:float 3.2s ease infinite">🌌</div>
-          <div class="hd" style="font-size:15px;color:rgba(216,180,254,.55);margin-bottom:6px">Belum ada aset</div>
-          <div style="font-size:12px;color:rgba(216,180,254,.3);line-height:1.6">Lakukan drop pertamamu untuk<br>menemukan aset dari ekosistem Orynth</div>
-          <button onclick="goTo('drop')" style="margin-top:18px;padding:10px 22px;border-radius:24px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.28);color:rgba(216,180,254,.8);font-size:12px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.07em">MULAI DROP →</button>
+          <div class="hd" style="font-size:15px;color:rgba(216,180,254,.55);margin-bottom:6px">No assets yet</div>
+          <div style="font-size:12px;color:rgba(216,180,254,.3);line-height:1.6">Do your first drop to<br>discover assets from the Orynth ecosystem</div>
+          <button onclick="goTo('drop')" style="margin-top:18px;padding:10px 22px;border-radius:24px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.28);color:rgba(216,180,254,.8);font-size:12px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.07em">GO DROP →</button>
         </div>
       </div>
     </div>
@@ -351,8 +351,8 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
     <!-- ── RANKINGS ── -->
     <div id="page-rankings" class="page">
       <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
-        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Peringkat Global</h2>
-        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">Explorer terbaik di seluruh ekosistem Orynth</p>
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Top Discoverers</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">Best explorers across the Orynth ecosystem</p>
         <div id="lb" class="stagger"></div>
       </div>
     </div>
@@ -360,8 +360,8 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
     <!-- ── DISCOVERIES ── -->
     <div id="page-discoveries" class="page">
       <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
-        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Semua Aset</h2>
-        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">10 aset di ekosistem Orynth yang bisa ditemukan</p>
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">All Assets</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,.45);margin-bottom:14px">10 discoverable assets in the Orynth ecosystem</p>
         <div id="all-assets" class="stagger" style="display:flex;flex-direction:column;gap:8px"></div>
       </div>
     </div>
@@ -377,11 +377,11 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
           <div style="font-size:11px;color:rgba(216,180,254,.38);margin-top:4px;font-family:monospace">0x7F2a...Bc94</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:20px" class="stagger">
-          <div class="scard" style="text-align:center"><div id="p-drops" class="hd" style="font-size:28px;font-weight:700;color:#a855f7">0</div><div style="font-size:11px;color:rgba(216,180,254,.45)">Total Drop</div></div>
-          <div class="scard" style="text-align:center"><div id="p-rare" class="hd" style="font-size:28px;font-weight:700;color:#fbbf24">0</div><div style="font-size:11px;color:rgba(216,180,254,.45)">Rare Ditemukan</div></div>
+          <div class="scard" style="text-align:center"><div id="p-drops" class="hd" style="font-size:28px;font-weight:700;color:#a855f7">0</div><div style="font-size:11px;color:rgba(216,180,254,.45)">Total Drops</div></div>
+          <div class="scard" style="text-align:center"><div id="p-rare" class="hd" style="font-size:28px;font-weight:700;color:#fbbf24">0</div><div style="font-size:11px;color:rgba(216,180,254,.45)">Rare Finds</div></div>
           <div class="scard" style="text-align:center;grid-column:span 2"><div id="p-score" class="hd" style="font-size:28px;font-weight:700;background:linear-gradient(135deg,#a855f7,#d8b4fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div><div style="font-size:11px;color:rgba(216,180,254,.45)">Discovery Score</div></div>
         </div>
-        <div class="hd" style="font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(216,180,254,.4);text-transform:uppercase;margin-bottom:10px">Pencapaian</div>
+        <div class="hd" style="font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(216,180,254,.4);text-transform:uppercase;margin-bottom:10px">Achievements</div>
         <div id="achs" style="display:flex;flex-direction:column;gap:7px" class="stagger"></div>
         <!-- Badge di profil juga -->
         <div style="margin-top:24px;text-align:center">
@@ -399,115 +399,115 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
         <!-- Header -->
         <div style="text-align:center;padding:8px 0 22px">
           <div style="font-size:48px;margin-bottom:10px;animation:float 3s ease infinite">🎮</div>
-          <h2 class="hd" style="font-size:22px;font-weight:700;color:#e9d5ff;margin-bottom:4px">Tentang WEDO</h2>
-          <p style="font-size:12px;color:rgba(216,180,254,.45)">Arcade discovery onchain di ekosistem Orynth</p>
+          <h2 class="hd" style="font-size:22px;font-weight:700;color:#e9d5ff;margin-bottom:4px">About WEDO</h2>
+          <p style="font-size:12px;color:rgba(216,180,254,.45)">Onchain discovery arcade in the Orynth ecosystem</p>
         </div>
 
         <!-- HOW TO PLAY -->
         <div class="info-section">
-          <h3>🕹 Cara Bermain</h3>
+          <h3>🕹 How to Play</h3>
           <div style="display:flex;flex-direction:column;gap:11px">
             <div style="display:flex;align-items:flex-start;gap:11px">
               <div class="step-num">1</div>
-              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Tekan MULAI DROP</div><p>Bola energi akan muncul di atas papan dan jatuh melewati jaringan kristal.</p></div>
+              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Press START DROP</div><p>An energy sphere appears at the top of the board and falls through the crystal peg network.</p></div>
             </div>
             <div style="display:flex;align-items:flex-start;gap:11px">
               <div class="step-num">2</div>
-              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Amati zona yang dituju</div><p>Saat bola jatuh, kolom zona di bawah akan menyala — menunjukkan kemana arah bola.</p></div>
+              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Watch the landing zone</div><p>As the sphere falls, the zone bar below lights up — showing which zone the ball is heading toward.</p></div>
             </div>
             <div style="display:flex;align-items:flex-start;gap:11px">
               <div class="step-num">3</div>
-              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Bola mendarat → aset terungkap</div><p>Animasi scanning muncul, lalu aset dengan tingkat kelangkaan tertentu akan terungkap.</p></div>
+              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Ball lands → asset revealed</div><p>A scanning animation plays, then an asset with a specific rarity tier is revealed.</p></div>
             </div>
             <div style="display:flex;align-items:flex-start;gap:11px">
               <div class="step-num">4</div>
-              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Klaim asetmu</div><p>Tekan ⚡ CLAIM untuk menyimpan aset ke koleksimu. Makin banyak drop, makin banyak temuan!</p></div>
+              <div><div style="font-size:13px;font-weight:600;color:#e9d5ff;margin-bottom:3px">Claim your asset</div><p>Press ⚡ CLAIM to save the asset to your collection. More drops = more discoveries!</p></div>
             </div>
           </div>
         </div>
 
         <!-- RARITY TABLE -->
         <div class="info-section">
-          <h3>✨ Tingkat Kelangkaan</h3>
+          <h3>✨ Rarity Tiers</h3>
           <div style="display:flex;flex-direction:column;gap:8px">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⚡</span><span style="font-size:13px;font-weight:600;color:#38bdf8">TRENDING</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">30% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">30% chance</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">🔥</span><span style="font-size:13px;font-weight:600;color:#f87171">HOT</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">20% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">20% chance</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.22)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">💎</span><span style="font-size:13px;font-weight:600;color:#a78bfa">RARE</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">20% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">20% chance</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">👁</span><span style="font-size:13px;font-weight:600;color:#34d399">HIDDEN</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">15% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">15% chance</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(233,213,255,.05);border:1px solid rgba(233,213,255,.18)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">🔭</span><span style="font-size:13px;font-weight:600;color:#e9d5ff">DISCOVERY</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">10% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">10% chance</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35)">
               <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⭐</span><span style="font-size:13px;font-weight:700;color:#fbbf24">LEGENDARY</span></div>
-              <span style="font-size:11px;color:rgba(216,180,254,.45)">5% peluang</span>
+              <span style="font-size:11px;color:rgba(216,180,254,.45)">5% chance</span>
             </div>
           </div>
         </div>
 
         <!-- STREAK -->
         <div class="info-section">
-          <h3>🔥 Sistem Streak</h3>
+          <h3>🔥 Streak System</h3>
           <ul>
-            <li>Drop 3× berturut-turut dengan hasil Rare/Hidden/Legendary → <strong style="color:#fbbf24">STREAK aktif!</strong></li>
-            <li>Setiap drop streak menambah multiplier score (×3, ×4, …)</li>
-            <li>Streak putus jika dapat TRENDING atau HOT</li>
-            <li>Makin panjang streak = makin besar bonus score</li>
+            <li>Drop 3× in a row with Rare/Hidden/Legendary results → <strong style="color:#fbbf24">STREAK activated!</strong></li>
+            <li>Each streak drop adds a score multiplier (×3, ×4, …)</li>
+            <li>Streak breaks if you land TRENDING or HOT</li>
+            <li>Longer streak = bigger score bonus</li>
           </ul>
         </div>
 
         <!-- ABOUT WEDO -->
         <div class="info-section">
-          <h3>🌌 Apa itu WEDO?</h3>
-          <p style="margin-bottom:9px">WEDO adalah game arcade discovery berbasis onchain yang dibangun di atas ekosistem <strong style="color:#a855f7">Orynth</strong>. Setiap drop adalah simulasi dari penemuan aset di pasar kripto — penuh kejutan, penuh risiko, dan penuh hadiah.</p>
-          <p>Mekanisme Plinko digital ini mencerminkan betapa tak terduganya pergerakan aset di pasar. Kamu tidak bisa mengontrol hasilnya, tapi kamu bisa membangun strategi koleksinya.</p>
+          <h3>🌌 What is WEDO?</h3>
+          <p style="margin-bottom:9px">WEDO is an onchain discovery arcade game built on the <strong style="color:#a855f7">Orynth</strong> ecosystem. Every drop simulates the discovery of an asset in the crypto market — full of surprises, risk, and rewards.</p>
+          <p>This digital Plinko mechanic mirrors the unpredictability of asset movements in the market. You can't control the outcome, but you can build your collection strategy.</p>
         </div>
 
         <!-- FAQ -->
         <div class="info-section">
-          <h3>❓ Pertanyaan Umum</h3>
+          <h3>❓ FAQ</h3>
           <div style="display:flex;flex-direction:column;gap:12px">
             <div>
-              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Apakah ini game blockchain sungguhan?</div>
-              <p>WEDO saat ini adalah demo arcade — aset dan skor bersifat simulasi. Versi onchain sedang dalam pengembangan di ekosistem Orynth.</p>
+              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Is this a real blockchain game?</div>
+              <p>WEDO is currently an arcade demo — assets and scores are simulated. The onchain version is in development within the Orynth ecosystem.</p>
             </div>
             <div style="border-top:1px solid rgba(168,85,247,.1);padding-top:12px">
-              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Aset apa saja yang bisa ditemukan?</div>
-              <p>Ada 10 aset di ekosistem Orynth: VOID, WAVE, NOVA, ECHO, FLUX, ZERO, ATOM, GHOST, ORBIT, dan CORE.</p>
+              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">What assets can be discovered?</div>
+              <p>There are 10 assets in the Orynth ecosystem: VOID, WAVE, NOVA, ECHO, FLUX, ZERO, ATOM, GHOST, ORBIT, and CORE.</p>
             </div>
             <div style="border-top:1px solid rgba(168,85,247,.1);padding-top:12px">
-              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Bagaimana cara masuk ke leaderboard?</div>
-              <p>Kumpulkan score dari setiap drop. Makin tinggi rarity yang kamu dapat + makin panjang streak = makin tinggi score.</p>
+              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">How do I get on the leaderboard?</div>
+              <p>Accumulate score from each drop. Higher rarity + longer streak = higher score.</p>
             </div>
             <div style="border-top:1px solid rgba(168,85,247,.1);padding-top:12px">
-              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Suara bisa dimatikan?</div>
-              <p>Bisa! Tap ikon speaker di pojok kanan atas untuk mute/unmute efek suara game.</p>
+              <div style="font-size:12.5px;font-weight:600;color:#e9d5ff;margin-bottom:4px">Can I mute the sound?</div>
+              <p>Yes! Tap the speaker icon in the top right corner to mute/unmute game sound effects.</p>
             </div>
           </div>
         </div>
 
         <!-- Links -->
         <div class="info-section">
-          <h3>🔗 Link Penting</h3>
+          <h3>🔗 Links</h3>
           <div style="display:flex;flex-direction:column;gap:7px">
             <a href="https://orynth.dev" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-radius:10px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.18);text-decoration:none;color:rgba(216,180,254,.8);font-size:12.5px;font-weight:600;transition:all .2s" onmouseenter="this.style.borderColor='rgba(168,85,247,.45)'" onmouseleave="this.style.borderColor='rgba(168,85,247,.18)'">
               <span>🌐 Orynth Ecosystem</span>
               <span style="color:rgba(168,85,247,.5)">→</span>
             </a>
             <a href="https://orynth.dev/projects/wedo" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-radius:10px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.18);text-decoration:none;color:rgba(216,180,254,.8);font-size:12.5px;font-weight:600;transition:all .2s" onmouseenter="this.style.borderColor='rgba(168,85,247,.45)'" onmouseleave="this.style.borderColor='rgba(168,85,247,.18)'">
-              <span>⚡ WEDO di Orynth</span>
+              <span>⚡ WEDO on Orynth</span>
               <span style="color:rgba(168,85,247,.5)">→</span>
             </a>
           </div>
@@ -533,7 +533,7 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
       </div>
       <div class="navitem" id="n-inventory" onclick="goTo('inventory')">
         <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>
-        <span class="navlabel">KOLEKSI</span>
+        <span class="navlabel">COLLECT</span>
       </div>
       <div class="navitem" id="n-rankings" onclick="goTo('rankings')">
         <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
@@ -541,7 +541,7 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
       </div>
       <div class="navitem" id="n-discoveries" onclick="goTo('discoveries')">
         <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <span class="navlabel">ASET</span>
+        <span class="navlabel">ASSETS</span>
       </div>
       <div class="navitem" id="n-about" onclick="goTo('about')">
         <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -581,13 +581,13 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
       <div class="glasslt" style="border-radius:11px;padding:11px"><div style="font-size:9px;color:rgba(216,180,254,.4);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Market Cap</div><div id="m-mcap" class="hd" style="font-size:15px;font-weight:700;color:#e9d5ff"></div></div>
       <div class="glasslt" style="border-radius:11px;padding:11px"><div style="font-size:9px;color:rgba(216,180,254,.4);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">24h Volume</div><div id="m-vol" class="hd" style="font-size:15px;font-weight:700;color:#e9d5ff"></div></div>
       <div class="glasslt" style="border-radius:11px;padding:11px"><div style="font-size:9px;color:rgba(216,180,254,.4);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Score</div><div id="m-dscore" class="hd" style="font-size:15px;font-weight:700;color:#a855f7"></div></div>
-      <div class="glasslt" style="border-radius:11px;padding:11px"><div style="font-size:9px;color:rgba(216,180,254,.4);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Kelangkaan</div><div id="m-rarity" class="hd" style="font-size:15px;font-weight:700"></div></div>
+      <div class="glasslt" style="border-radius:11px;padding:11px"><div style="font-size:9px;color:rgba(216,180,254,.4);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">Rarity</div><div id="m-rarity" class="hd" style="font-size:15px;font-weight:700"></div></div>
     </div>
     <div style="display:flex;gap:9px">
-      <button id="claim-btn" onclick="claimAsset()" class="btn-drop" style="flex:1;padding:14px;border-radius:13px;font-size:13.5px;border:none;justify-content:center">⚡ KLAIM</button>
-      <button onclick="closeModal()" class="glasslt" style="padding:14px 18px;border-radius:13px;font-size:13px;font-weight:600;color:rgba(216,180,254,.65);cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.06em">LIHAT</button>
+      <button id="claim-btn" onclick="claimAsset()" class="btn-drop" style="flex:1;padding:14px;border-radius:13px;font-size:13.5px;border:none;justify-content:center">⚡ CLAIM</button>
+      <button onclick="closeModal()" class="glasslt" style="padding:14px 18px;border-radius:13px;font-size:13px;font-weight:600;color:rgba(216,180,254,.65);cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:.06em">VIEW</button>
     </div>
-    <button onclick="closeModal();setTimeout(triggerDrop,280)" style="width:100%;margin-top:8px;padding:12px;border-radius:13px;background:transparent;border:1px solid rgba(168,85,247,.18);color:rgba(216,180,254,.45);font-size:12.5px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:.06em;transition:all .2s">DROP LAGI</button>
+    <button onclick="closeModal();setTimeout(triggerDrop,280)" style="width:100%;margin-top:8px;padding:12px;border-radius:13px;background:transparent;border:1px solid rgba(168,85,247,.18);color:rgba(216,180,254,.45);font-size:12.5px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:.06em;transition:all .2s">DROP AGAIN</button>
   </div>
 </div>
 
@@ -597,8 +597,8 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
     <div class="modal-handle"></div>
     <div style="text-align:center;margin-bottom:20px">
       <div style="font-size:36px;margin-bottom:10px;animation:orbPulse 3s ease infinite">🔐</div>
-      <div class="hd" style="font-size:20px;font-weight:700;color:#e9d5ff;margin-bottom:5px">Masuk ke WEDO</div>
-      <p style="font-size:12px;color:rgba(216,180,254,.45);line-height:1.5">Hubungkan wallet-mu untuk menyimpan<br>koleksi, skor, dan pencapaianmu</p>
+      <div class="hd" style="font-size:20px;font-weight:700;color:#e9d5ff;margin-bottom:5px">Connect to WEDO</div>
+      <p style="font-size:12px;color:rgba(216,180,254,.45);line-height:1.5">Connect your wallet to save your<br>collection, score, and achievements</p>
     </div>
     <!-- Wallet options -->
     <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px">
@@ -609,7 +609,7 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
       </button>
       <button onclick="connectWallet('walletconnect')" style="display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:13px;background:rgba(56,153,255,.06);border:1px solid rgba(56,153,255,.2);cursor:pointer;width:100%;transition:all .2s;color:#fff" onmouseenter="this.style.borderColor='rgba(56,153,255,.5)'" onmouseleave="this.style.borderColor='rgba(56,153,255,.2)'">
         <span style="font-size:26px">🔗</span>
-        <div style="text-align:left"><div style="font-size:13px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#e9d5ff">WalletConnect</div><div style="font-size:11px;color:rgba(216,180,254,.4);margin-top:1px">Scan QR dengan wallet mobile</div></div>
+        <div style="text-align:left"><div style="font-size:13px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#e9d5ff">WalletConnect</div><div style="font-size:11px;color:rgba(216,180,254,.4);margin-top:1px">Scan QR with mobile wallet</div></div>
         <svg style="margin-left:auto;flex-shrink:0" width="14" height="14" fill="none" stroke="rgba(216,180,254,0.3)" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
       </button>
       <button onclick="connectWallet('phantom')" style="display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:13px;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);cursor:pointer;width:100%;transition:all .2s;color:#fff" onmouseenter="this.style.borderColor='rgba(168,85,247,.5)'" onmouseleave="this.style.borderColor='rgba(168,85,247,.2)'">
@@ -618,8 +618,8 @@ h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
         <svg style="margin-left:auto;flex-shrink:0" width="14" height="14" fill="none" stroke="rgba(216,180,254,0.3)" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
       </button>
     </div>
-    <p style="font-size:10.5px;color:rgba(216,180,254,.3);text-align:center;line-height:1.5">Dengan masuk, kamu menyetujui penggunaan<br>WEDO sebagai platform demo non-finansial</p>
-    <button onclick="closeLogin()" style="width:100%;margin-top:12px;padding:12px;border-radius:13px;background:transparent;border:1px solid rgba(168,85,247,.18);color:rgba(216,180,254,.4);font-size:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:.06em">BATAL</button>
+    <p style="font-size:10.5px;color:rgba(216,180,254,.3);text-align:center;line-height:1.5">By connecting, you agree to use<br>WEDO as a non-financial demo platform</p>
+    <button onclick="closeLogin()" style="width:100%;margin-top:12px;padding:12px;border-radius:13px;background:transparent;border:1px solid rgba(168,85,247,.18);color:rgba(216,180,254,.4);font-size:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:.06em">CANCEL</button>
   </div>
 </div>
 
@@ -667,16 +667,16 @@ function playLand(rLabel){
 
 // ─── DATA ─────────────────────────────────────────────────────────
 const ASSETS=[
-  {name:'VOID',ticker:'$VOID',color:'#6366f1',desc:'Set kosong — entropi murni'},
-  {name:'WAVE',ticker:'$WAVE',color:'#38bdf8',desc:'Token propagasi sinyal'},
-  {name:'NOVA',ticker:'$NOVA',color:'#f59e0b',desc:'Katalis runtuhnya bintang'},
-  {name:'ECHO',ticker:'$ECHO',color:'#34d399',desc:'Protokol amplifikasi resonansi'},
-  {name:'FLUX',ticker:'$FLUX',color:'#a855f7',desc:'Stabilizer fluks kuantum'},
-  {name:'ZERO',ticker:'$ZERO',color:'#94a3b8',desc:'Token titik asal'},
-  {name:'ATOM',ticker:'$ATOM',color:'#e879f9',desc:'Token partikel lapisan dasar'},
-  {name:'GHOST',ticker:'$GHOST',color:'#c084fc',desc:'Lapisan jaringan tak terlihat'},
-  {name:'ORBIT',ticker:'$ORBIT',color:'#fb923c',desc:'Loop konsensus gravitasi'},
-  {name:'CORE',ticker:'$CORE',color:'#f87171',desc:'Token unit pemrosesan pusat'},
+  {name:'VOID',ticker:'$VOID',color:'#6366f1',desc:'Empty set — pure entropy'},
+  {name:'WAVE',ticker:'$WAVE',color:'#38bdf8',desc:'Signal propagation token'},
+  {name:'NOVA',ticker:'$NOVA',color:'#f59e0b',desc:'Star collapse catalyst'},
+  {name:'ECHO',ticker:'$ECHO',color:'#34d399',desc:'Resonance amplification protocol'},
+  {name:'FLUX',ticker:'$FLUX',color:'#a855f7',desc:'Quantum flux stabilizer'},
+  {name:'ZERO',ticker:'$ZERO',color:'#94a3b8',desc:'Origin point token'},
+  {name:'ATOM',ticker:'$ATOM',color:'#e879f9',desc:'Base layer particle token'},
+  {name:'GHOST',ticker:'$GHOST',color:'#c084fc',desc:'Invisible network layer'},
+  {name:'ORBIT',ticker:'$ORBIT',color:'#fb923c',desc:'Gravitational consensus loop'},
+  {name:'CORE',ticker:'$CORE',color:'#f87171',desc:'Central processing unit token'},
 ];
 const RARITIES=[
   {label:'TRENDING',e:'⚡',c:'#38bdf8',bg:'rgba(56,189,248,.09)',b:'rgba(56,189,248,.3)',w:30},
@@ -694,12 +694,12 @@ const LEADERS=[
   {w:'0x9A...1B33',d:3901,r:121,s:42103},{w:'0x5F...E490',d:3422,r:98,s:38811},
 ];
 const ACHIEV_DEF=[
-  {icon:'⚡',t:'Drop Pertama',d:'Menjatuhkan bola energi pertama kali',id:'first_drop'},
-  {icon:'💎',t:'Pemburu Rare',d:'Menemukan aset pertama bertipe Rare',id:'rare_hunter'},
-  {icon:'⭐',t:'Legenda Ditemukan',d:'Berhasil mendapat temuan LEGENDARY',id:'legendary'},
-  {icon:'🔭',t:'Explorer',d:'Mengklaim 5 aset unik',id:'explorer'},
-  {icon:'🔥',t:'On Fire',d:'3 drop dalam satu sesi',id:'on_fire'},
-  {icon:'🎯',t:'Master Streak',d:'Mencapai streak ×3 atau lebih',id:'streak_master'},
+  {icon:'⚡',t:'First Drop',d:'Dropped an energy sphere for the first time',id:'first_drop'},
+  {icon:'💎',t:'Rare Hunter',d:'Discovered your first Rare-tier asset',id:'rare_hunter'},
+  {icon:'⭐',t:'Legend Found',d:'Successfully landed a LEGENDARY discovery',id:'legendary'},
+  {icon:'🔭',t:'Explorer',d:'Claimed 5 unique assets',id:'explorer'},
+  {icon:'🔥',t:'On Fire',d:'3 drops in a single session',id:'on_fire'},
+  {icon:'🎯',t:'Streak Master',d:'Reached a ×3 streak or higher',id:'streak_master'},
 ];
 const S={drops:12847,disc:4391,online:892,myDrops:0,myRare:0,myScore:0,inv:[],cur:null,dropping:false,streak:0};
 let _achState={first_drop:false,rare_hunter:false,legendary:false,explorer:false,on_fire:false,streak_master:false};
@@ -722,7 +722,7 @@ function connectWallet(type){
   document.getElementById('login-txt').textContent=addr;
   document.getElementById('login-btn').classList.add('connected');
   closeLogin();
-  addFeed(`Terhubung via ${names[type]} 🔐`,  '#4ade80', true);
+  addFeed(`Connected via ${names[type]} 🔐`, '#4ade80', true);
 }
 
 // ─── BACKGROUND ────────────────────────────────────────────────────
@@ -980,7 +980,7 @@ function handleLand(r,landX){
   playLand(r.label);if(r.label==='LEGENDARY')launchConfetti(r.c);
   const btn=document.getElementById('drop-btn');
   btn.disabled=false;btn.classList.remove('scanning','legendary');
-  document.getElementById('drop-icon').textContent='⚡';document.getElementById('drop-txt').textContent='MULAI DROP';
+  document.getElementById('drop-icon').textContent='⚡';document.getElementById('drop-txt').textContent='START DROP';
   const a=ASSETS[ri(ASSETS.length)],sc=score();
   S.cur={...a,rarity:r,score:sc,mcap:mcap(),vol:vol()};
   S.disc++;ctr('st-disc',S.disc);
@@ -990,7 +990,7 @@ function handleLand(r,landX){
   const mult=S.streak>=3?S.streak:1;S.myScore+=sc*mult;
   document.getElementById('p-rare').textContent=S.myRare;
   document.getElementById('p-score').textContent=S.myScore.toLocaleString();
-  addFeed(`${wallet()} menemukan ${r.e} ${a.ticker}`,r.c);
+  addFeed(`${wallet()} found ${r.e} ${a.ticker}`,r.c);
   showScorePop(sc,r.c,mult);
   showScan(r,()=>showModal(S.cur));
   if(S.myDrops===1)_achState.first_drop=true;
