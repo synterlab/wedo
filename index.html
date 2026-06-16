@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>WEDO — Discover Emerging Assets</title>
+<meta name="description" content="An experimental onchain discovery arcade. Drop an energy sphere through a futuristic neural network and discover assets from the Orynth ecosystem." />
+<meta property="og:title" content="WEDO" />
+<meta property="og:description" content="Discover emerging assets through chaos." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{heading:['Space Grotesk','sans-serif'],body:['Inter','sans-serif']}}}}
+</script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+:root{--void:#050505;--deep:#0B071B;--mid:#171030;--v:#A855F7;--lav:#D8B4FE}
+html,body{background:#050505;color:#fff;font-family:'Inter',sans-serif;overflow:hidden;height:100%;width:100%;position:fixed}
+h1,h2,h3,h4,.hd{font-family:'Space Grotesk',sans-serif}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.4);border-radius:2px}
+
+#app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.topbar{position:relative;z-index:50;flex-shrink:0;background:rgba(11,7,27,0.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(168,85,247,0.12)}
+.main{position:relative;z-index:10;flex:1;overflow:hidden;display:flex;flex-direction:column}
+.tcontent{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:84px}
+.botnav{position:relative;z-index:50;flex-shrink:0;background:rgba(11,7,27,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(168,85,247,0.12)}
+
+.glass{background:rgba(23,16,48,0.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(168,85,247,0.15)}
+.glasslt{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.07)}
+
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%{box-shadow:0 0 15px rgba(168,85,247,0.4)}100%{box-shadow:0 0 35px rgba(168,85,247,0.75),0 0 70px rgba(168,85,247,0.2)}}
+@keyframes slideUp{0%{opacity:0;transform:translateY(32px) scale(0.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.live-dot{animation:livePulse 1.5s ease infinite}
+.btn-drop{
+  position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 55%,#c084fc 100%);
+  border:1px solid rgba(216,180,254,0.3);border-radius:50px;
+  padding:15px 38px;font-size:15px;font-weight:700;letter-spacing:0.1em;
+  color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  animation:glow 2s ease-in-out infinite alternate;
+  transition:transform 0.15s ease,opacity 0.15s ease;
+}
+.btn-drop:active{transform:scale(0.95)}
+.btn-drop::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+  transition:left 0.45s ease;
+}
+.btn-drop:hover::before{left:100%}
+.btn-drop:disabled{opacity:0.55;animation:none;cursor:not-allowed}
+
+#game-canvas{display:block;touch-action:none}
+
+.zone-slot{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:5px 2px;border-radius:7px;font-size:9px;font-weight:700;
+  letter-spacing:0.05em;font-family:'Space Grotesk',sans-serif;
+  border:1px solid transparent;transition:all 0.3s ease;
+}
+
+.navitem{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  flex:1;padding:9px 4px 6px;cursor:pointer;transition:all 0.2s ease;
+  color:rgba(216,180,254,0.38);
+}
+.navitem.active{color:#a855f7}
+.navitem svg{transition:stroke 0.2s ease}
+.navitem:active{transform:scale(0.9)}
+.navlabel{font-size:9.5px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.05em;margin-top:1px}
+
+.scard{
+  background:rgba(23,16,48,0.85);border:1px solid rgba(168,85,247,0.14);
+  border-radius:12px;padding:12px 14px;
+  transition:border-color 0.25s,transform 0.2s;
+}
+.scard:hover{border-color:rgba(168,85,247,0.38);transform:translateY(-1px)}
+
+.feed-item{
+  display:flex;align-items:center;gap:9px;padding:9px 12px;
+  border-radius:10px;background:rgba(23,16,48,0.7);
+  border:1px solid rgba(168,85,247,0.09);margin-bottom:5px;
+  animation:fadeIn 0.35s ease;
+}
+
+#modal-overlay{
+  position:fixed;inset:0;z-index:200;display:none;
+  align-items:flex-end;justify-content:center;
+  background:rgba(5,5,5,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+#modal-overlay.active{display:flex;animation:fadeIn 0.25s ease}
+#modal-card{
+  width:100%;max-width:480px;max-height:92vh;overflow-y:auto;
+  border-radius:24px 24px 0 0;padding:20px 20px 32px;
+  background:linear-gradient(180deg,rgba(23,16,48,0.99) 0%,rgba(11,7,27,1) 100%);
+  border:1px solid rgba(168,85,247,0.22);border-bottom:none;
+  animation:slideUp 0.42s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.acard{
+  background:rgba(23,16,48,0.8);border:1px solid rgba(168,85,247,0.11);
+  border-radius:13px;padding:13px;
+  transition:all 0.2s ease;cursor:pointer;
+}
+.acard:hover{border-color:rgba(168,85,247,0.32);transform:translateY(-2px);box-shadow:0 6px 20px rgba(168,85,247,0.1)}
+.acard:active{transform:scale(0.97)}
+
+.lcard{
+  background:rgba(23,16,48,0.8);border:1px solid rgba(168,85,247,0.11);
+  border-radius:13px;padding:13px 15px;display:flex;align-items:center;gap:11px;
+  margin-bottom:7px;transition:all 0.2s ease;
+}
+
+.achiev{
+  background:rgba(23,16,48,0.9);border:1px solid rgba(168,85,247,0.18);
+  border-radius:12px;padding:11px;display:flex;align-items:center;gap:9px;
+}
+
+.page{display:none;flex-direction:column;height:100%}
+.page.active{display:flex}
+
+.avring{border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#7c3aed,#a855f7,#c084fc)}
+
+/* Stagger entrance */
+.stagger>*{opacity:0;animation:slideUp 0.38s ease forwards}
+.stagger>*:nth-child(1){animation-delay:0.04s}.stagger>*:nth-child(2){animation-delay:0.09s}
+.stagger>*:nth-child(3){animation-delay:0.14s}.stagger>*:nth-child(4){animation-delay:0.19s}
+.stagger>*:nth-child(5){animation-delay:0.24s}.stagger>*:nth-child(6){animation-delay:0.29s}
+.stagger>*:nth-child(7){animation-delay:0.34s}.stagger>*:nth-child(8){animation-delay:0.39s}
+.stagger>*:nth-child(9){animation-delay:0.44s}.stagger>*:nth-child(10){animation-delay:0.49s}
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="bg"></canvas>
+
+  <!-- TOP BAR -->
+  <div class="topbar" style="padding:11px 16px 10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;max-width:480px;margin:0 auto;width:100%">
+      <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="goTo('drop')">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <defs>
+            <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#c084fc"/><stop offset="50%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+            <radialGradient id="rg1" cx="40%" cy="35%" r="55%">
+              <stop offset="0%" stop-color="#f3e8ff"/><stop offset="55%" stop-color="#a855f7"/><stop offset="100%" stop-color="#4c1d95"/>
+            </radialGradient>
+          </defs>
+          <circle cx="15" cy="15" r="13.5" stroke="url(#lg1)" stroke-width="1.5" fill="none"/>
+          <circle cx="15" cy="15" r="9" stroke="url(#lg1)" stroke-width="0.5" fill="none" opacity="0.4"/>
+          <circle cx="15" cy="15" r="5.5" fill="url(#rg1)"/>
+          <circle cx="12.5" cy="12.5" r="1.8" fill="rgba(255,255,255,0.45)"/>
+        </svg>
+        <span class="hd" style="font-size:18px;font-weight:700;letter-spacing:0.06em;background:linear-gradient(135deg,#f3e8ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent">WEDO</span>
+      </div>
+      <div class="hd" style="font-size:10px;font-weight:600;letter-spacing:0.14em;color:rgba(216,180,254,0.38);text-transform:uppercase">Orynth</div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <button onclick="goTo('profile')" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);border:1.5px solid rgba(216,180,254,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px">👤</button>
+        <button style="width:30px;height:30px;border-radius:8px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.18);cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(216,180,254,0.6)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- DROP PAGE -->
+    <div id="page-drop" class="page active tcontent" style="padding:0">
+      <div style="max-width:480px;margin:0 auto;width:100%;padding-bottom:16px">
+
+        <!-- Hero -->
+        <div style="padding:18px 16px 10px;text-align:center">
+          <h1 class="hd" style="font-size:clamp(2rem,9vw,2.8rem);font-weight:700;letter-spacing:-0.02em;background:linear-gradient(135deg,#fff 0%,#d8b4fe 45%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px">WEDO</h1>
+          <p style="font-size:13px;color:rgba(216,180,254,0.6);margin-bottom:18px;letter-spacing:0.01em">Discover emerging assets through chaos.</p>
+          <button id="drop-btn" class="btn-drop" onclick="triggerDrop()">
+            <span id="drop-icon">⚡</span><span id="drop-txt">START DROP</span>
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:4px 14px 10px">
+          <div class="scard" style="text-align:center">
+            <div style="font-size:9.5px;color:rgba(216,180,254,0.45);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Drops</div>
+            <div id="st-drops" class="hd" style="font-size:19px;font-weight:700;color:#d8b4fe">—</div>
+          </div>
+          <div class="scard" style="text-align:center">
+            <div style="font-size:9.5px;color:rgba(216,180,254,0.45);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Found</div>
+            <div id="st-disc" class="hd" style="font-size:19px;font-weight:700;color:#d8b4fe">—</div>
+          </div>
+          <div class="scard" style="text-align:center">
+            <div style="font-size:9.5px;color:rgba(216,180,254,0.45);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Online</div>
+            <div id="st-online" class="hd" style="font-size:19px;font-weight:700;color:#4ade80">—</div>
+          </div>
+        </div>
+
+        <!-- Game Board -->
+        <div style="padding:0 12px">
+          <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(168,85,247,0.2);background:rgba(11,7,27,0.95);position:relative">
+            <canvas id="game-canvas"></canvas>
+            <!-- Zone Bar -->
+            <div style="display:flex;padding:5px 7px;gap:3px;background:rgba(5,5,5,0.65);border-top:1px solid rgba(168,85,247,0.12)">
+              <div class="zone-slot" style="color:#38bdf8;background:rgba(56,189,248,0.06);border-color:rgba(56,189,248,0.2)"><span>⚡</span><span>TREND</span></div>
+              <div class="zone-slot" style="color:#a78bfa;background:rgba(167,139,250,0.06);border-color:rgba(167,139,250,0.2)"><span>💎</span><span>RARE</span></div>
+              <div class="zone-slot" style="color:#34d399;background:rgba(52,211,153,0.06);border-color:rgba(52,211,153,0.2)"><span>👁</span><span>HIDDEN</span></div>
+              <div class="zone-slot" style="color:#fbbf24;background:rgba(251,191,36,0.06);border-color:rgba(251,191,36,0.2)"><span>⭐</span><span>LEGEND</span></div>
+              <div class="zone-slot" style="color:#f87171;background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.2)"><span>🔥</span><span>HOT</span></div>
+              <div class="zone-slot" style="color:#e9d5ff;background:rgba(233,213,255,0.04);border-color:rgba(233,213,255,0.18)"><span>🔭</span><span>FIND</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Feed -->
+        <div style="padding:12px 14px 0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px">
+            <div class="live-dot" style="width:6px;height:6px;border-radius:50%;background:#4ade80;flex-shrink:0"></div>
+            <span class="hd" style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:rgba(216,180,254,0.55);text-transform:uppercase">Live Feed</span>
+          </div>
+          <div id="feed" style="height:152px;overflow-y:auto;overflow-x:hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY PAGE -->
+    <div id="page-inventory" class="page tcontent">
+      <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">My Collection</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,0.45);margin-bottom:14px">Assets discovered through drops</p>
+        <div id="inv-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px"></div>
+        <div id="inv-empty" style="text-align:center;padding:44px 20px">
+          <div style="font-size:46px;margin-bottom:10px">🌌</div>
+          <div class="hd" style="font-size:15px;color:rgba(216,180,254,0.55);margin-bottom:5px">No assets yet</div>
+          <div style="font-size:12px;color:rgba(216,180,254,0.3)">Drop your first sphere to discover</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANKINGS PAGE -->
+    <div id="page-rankings" class="page tcontent">
+      <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Top Discoverers</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,0.45);margin-bottom:14px">Global leaderboard</p>
+        <div id="lb" class="stagger"></div>
+      </div>
+    </div>
+
+    <!-- DISCOVERIES PAGE -->
+    <div id="page-discoveries" class="page tcontent">
+      <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
+        <h2 class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff;margin-bottom:3px">Orynth Assets</h2>
+        <p style="font-size:12px;color:rgba(216,180,254,0.45);margin-bottom:14px">All assets in the ecosystem</p>
+        <div id="all-assets" class="stagger" style="display:flex;flex-direction:column;gap:7px"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="page-profile" class="page tcontent">
+      <div style="max-width:480px;margin:0 auto;width:100%;padding:16px">
+        <div style="text-align:center;padding:6px 0 22px">
+          <div class="avring" style="width:76px;height:76px;margin:0 auto 11px;display:flex;align-items:center;justify-content:center">
+            <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#1e1147,#2d1b69);display:flex;align-items:center;justify-content:center;font-size:30px">👤</div>
+          </div>
+          <div class="hd" style="font-size:19px;font-weight:700;color:#e9d5ff">Explorer #7429</div>
+          <div style="font-size:11px;color:rgba(216,180,254,0.38);margin-top:4px;font-family:monospace">0x7F2a...Bc94</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:18px" class="stagger">
+          <div class="scard" style="text-align:center">
+            <div id="p-drops" class="hd" style="font-size:26px;font-weight:700;color:#a855f7">0</div>
+            <div style="font-size:11px;color:rgba(216,180,254,0.45)">Total Drops</div>
+          </div>
+          <div class="scard" style="text-align:center">
+            <div id="p-rare" class="hd" style="font-size:26px;font-weight:700;color:#fbbf24">0</div>
+            <div style="font-size:11px;color:rgba(216,180,254,0.45)">Rare Finds</div>
+          </div>
+          <div class="scard" style="text-align:center;grid-column:span 2">
+            <div id="p-score" class="hd" style="font-size:26px;font-weight:700;background:linear-gradient(135deg,#a855f7,#d8b4fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
+            <div style="font-size:11px;color:rgba(216,180,254,0.45)">Discovery Score</div>
+          </div>
+        </div>
+        <div class="hd" style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:rgba(216,180,254,0.4);text-transform:uppercase;margin-bottom:9px">Achievements</div>
+        <div id="achs" style="display:flex;flex-direction:column;gap:7px" class="stagger"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="botnav" style="padding:3px 0 max(6px,env(safe-area-inset-bottom))">
+    <div style="display:flex;max-width:480px;margin:0 auto;width:100%">
+      <div class="navitem active" id="n-drop" onclick="goTo('drop')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12l4 4 4-4"/></svg>
+        <span class="navlabel">DROP</span>
+      </div>
+      <div class="navitem" id="n-inventory" onclick="goTo('inventory')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 3v18M16 3v18M2 9h20M2 15h20"/></svg>
+        <span class="navlabel">INVENTORY</span>
+      </div>
+      <div class="navitem" id="n-rankings" onclick="goTo('rankings')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        <span class="navlabel">RANKINGS</span>
+      </div>
+      <div class="navitem" id="n-discoveries" onclick="goTo('discoveries')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span class="navlabel">DISCOVER</span>
+      </div>
+      <div class="navitem" id="n-profile" onclick="goTo('profile')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="navlabel">PROFILE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div id="modal-card">
+    <div style="width:36px;height:4px;background:rgba(168,85,247,0.25);border-radius:2px;margin:0 auto 18px"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div id="m-badge" class="hd" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;padding:4px 11px;border-radius:20px;border:1px solid"></div>
+      <div id="m-score-lbl" style="font-size:11px;color:rgba(216,180,254,0.5);font-family:'Space Grotesk',sans-serif;font-weight:600"></div>
+    </div>
+    <div style="text-align:center;padding:20px 0 18px">
+      <div id="m-orb" style="width:86px;height:86px;border-radius:50%;margin:0 auto 13px;position:relative;transition:box-shadow 0.3s ease"></div>
+      <div id="m-name" class="hd" style="font-size:26px;font-weight:700;margin-bottom:2px"></div>
+      <div id="m-ticker" style="font-size:13px;color:rgba(216,180,254,0.45);font-family:monospace;font-weight:600"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px">
+      <div class="glasslt" style="border-radius:11px;padding:11px">
+        <div style="font-size:9.5px;color:rgba(216,180,254,0.4);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Market Cap</div>
+        <div id="m-mcap" class="hd" style="font-size:14px;font-weight:700;color:#e9d5ff"></div>
+      </div>
+      <div class="glasslt" style="border-radius:11px;padding:11px">
+        <div style="font-size:9.5px;color:rgba(216,180,254,0.4);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">24h Volume</div>
+        <div id="m-vol" class="hd" style="font-size:14px;font-weight:700;color:#e9d5ff"></div>
+      </div>
+      <div class="glasslt" style="border-radius:11px;padding:11px">
+        <div style="font-size:9.5px;color:rgba(216,180,254,0.4);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Discovery Score</div>
+        <div id="m-dscore" class="hd" style="font-size:14px;font-weight:700;color:#a855f7"></div>
+      </div>
+      <div class="glasslt" style="border-radius:11px;padding:11px">
+        <div style="font-size:9.5px;color:rgba(216,180,254,0.4);font-weight:700;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px">Rarity</div>
+        <div id="m-rarity" class="hd" style="font-size:14px;font-weight:700"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button onclick="claimAsset()" class="btn-drop" style="flex:1;padding:14px;border-radius:13px;font-size:13.5px;border:none;justify-content:center">⚡ CLAIM</button>
+      <button onclick="closeModal()" class="glasslt" style="padding:14px 16px;border-radius:13px;font-size:13px;font-weight:600;color:rgba(216,180,254,0.65);cursor:pointer;font-family:'Space Grotesk',sans-serif;letter-spacing:0.06em;border:1px solid rgba(168,85,247,0.15)">VIEW</button>
+    </div>
+    <button onclick="closeModal();setTimeout(triggerDrop,250)" style="width:100%;margin-top:8px;padding:11px;border-radius:13px;background:transparent;border:1px solid rgba(168,85,247,0.18);color:rgba(216,180,254,0.45);font-size:12.5px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.06em;transition:all 0.2s ease">DROP AGAIN</button>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────
+const ASSETS=[
+  {name:'VOID',ticker:'$VOID',color:'#6366f1',desc:'The empty set — pure entropy'},
+  {name:'WAVE',ticker:'$WAVE',color:'#38bdf8',desc:'Signal propagation token'},
+  {name:'NOVA',ticker:'$NOVA',color:'#f59e0b',desc:'Stellar collapse catalyst'},
+  {name:'ECHO',ticker:'$ECHO',color:'#34d399',desc:'Resonance amplifier protocol'},
+  {name:'FLUX',ticker:'$FLUX',color:'#a855f7',desc:'Quantum flux stabilizer'},
+  {name:'ZERO',ticker:'$ZERO',color:'#94a3b8',desc:'The origin point token'},
+  {name:'ATOM',ticker:'$ATOM',color:'#e879f9',desc:'Base layer particle token'},
+  {name:'GHOST',ticker:'$GHOST',color:'#c084fc',desc:'Invisible network layer'},
+  {name:'ORBIT',ticker:'$ORBIT',color:'#fb923c',desc:'Gravitational consensus loop'},
+  {name:'CORE',ticker:'$CORE',color:'#f87171',desc:'Central processing unit token'},
+];
+const RARITIES=[
+  {label:'TRENDING',e:'⚡',c:'#38bdf8',bg:'rgba(56,189,248,0.09)',b:'rgba(56,189,248,0.28)',w:30},
+  {label:'RARE',e:'💎',c:'#a78bfa',bg:'rgba(167,139,250,0.09)',b:'rgba(167,139,250,0.28)',w:20},
+  {label:'HIDDEN',e:'👁',c:'#34d399',bg:'rgba(52,211,153,0.09)',b:'rgba(52,211,153,0.28)',w:15},
+  {label:'LEGENDARY',e:'⭐',c:'#fbbf24',bg:'rgba(251,191,36,0.09)',b:'rgba(251,191,36,0.28)',w:5},
+  {label:'HOT',e:'🔥',c:'#f87171',bg:'rgba(248,113,113,0.09)',b:'rgba(248,113,113,0.28)',w:20},
+  {label:'DISCOVERY',e:'🔭',c:'#e9d5ff',bg:'rgba(233,213,255,0.05)',b:'rgba(233,213,255,0.22)',w:10},
+];
+const WALLETS=['0xA7','0x51','0xD2','0xB4','0xF9','0x3C','0x8E','0x1A'];
+const LEADERS=[
+  {w:'0xF4...9B12',d:8421,r:312,s:94210},
+  {w:'0xA2...D3C4',d:7102,r:278,s:82401},
+  {w:'0x7E...5F01',d:6890,r:241,s:77033},
+  {w:'0xC1...2E87',d:5341,r:198,s:61204},
+  {w:'0x8B...A4F2',d:4892,r:167,s:54900},
+  {w:'0x3D...7C61',d:4210,r:144,s:47821},
+  {w:'0x9A...1B33',d:3901,r:121,s:42103},
+  {w:'0x5F...E490',d:3422,r:98,s:38811},
+];
+const ACHIEV_DEF=[
+  {icon:'⚡',t:'First Drop',d:'Dropped your first energy sphere',id:'first_drop'},
+  {icon:'💎',t:'Rare Hunter',d:'Discovered your first rare asset',id:'rare_hunter'},
+  {icon:'⭐',t:'Legend Found',d:'Found a legendary discovery',id:'legendary'},
+  {icon:'🔭',t:'Explorer',d:'Claimed 5 unique assets',id:'explorer'},
+  {icon:'🔥',t:'On Fire',d:'3 drops in one session',id:'on_fire'},
+];
+
+// ─── STATE ───────────────────────────────
+const S={drops:12847,disc:4391,online:892,myDrops:0,myRare:0,myScore:0,inv:[],cur:null,dropping:false};
+
+// ─── HELPERS ────────────────────────────
+const ri=(a,b=0)=>Math.floor(Math.random()*(a-b)+b);
+const rf=(a,b)=>Math.random()*(b-a)+a;
+const rarity=()=>{let t=RARITIES.reduce((a,r)=>a+r.w,0),n=Math.random()*t;for(const r of RARITIES)if((n-=r.w)<=0)return r;return RARITIES[0];}
+const mcap=()=>`$${ri(999,1)}${['K','M','B'][ri(3)]}`
+const vol=()=>`$${rf(1,99).toFixed(1)}M`
+const score=()=>ri(9999,1000)
+const wallet=()=>WALLETS[ri(WALLETS.length)]+'...'+Math.random().toString(36).substr(2,4).toUpperCase()
+
+// ─── BACKGROUND CANVAS ──────────────────
+const bgC=document.getElementById('bg'),bgX=bgC.getContext('2d');
+let pts=[],auroraT=0;
+
+function initBg(){
+  bgC.width=window.innerWidth;bgC.height=window.innerHeight;
+  pts=Array.from({length:55},()=>({
+    x:Math.random()*bgC.width,y:Math.random()*bgC.height,
+    vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,
+    r:Math.random()*2+.5,a:Math.random(),da:(Math.random()-.5)*.004,
+    hue:260+Math.random()*60,
+  }));
+}
+
+function drawBg(){
+  requestAnimationFrame(drawBg);
+  const W=bgC.width,H=bgC.height;
+  bgX.clearRect(0,0,W,H);
+  const g=bgX.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#050505');g.addColorStop(.5,'#0B071B');g.addColorStop(1,'#050505');
+  bgX.fillStyle=g;bgX.fillRect(0,0,W,H);
+
+  auroraT+=.0025;
+  for(let i=0;i<3;i++){
+    bgX.save();bgX.globalAlpha=.03+i*.01;bgX.beginPath();
+    const off=Math.sin(auroraT+i*2)*.09;
+    bgX.moveTo(0,H*.3+off*H);
+    for(let x=0;x<=W;x+=18){
+      const y=H*.3+Math.sin(x*.005+auroraT+i)*H*.07+Math.sin(x*.003+auroraT*.65)*H*.05+off*H;
+      bgX.lineTo(x,y);
+    }
+    bgX.lineTo(W,H);bgX.lineTo(0,H);bgX.closePath();
+    const ag=bgX.createLinearGradient(0,H*.15,0,H*.85);
+    const h=260+i*20+Math.sin(auroraT)*18;
+    ag.addColorStop(0,`hsla(${h},80%,50%,0)`);ag.addColorStop(.5,`hsla(${h},80%,50%,1)`);ag.addColorStop(1,`hsla(${h},80%,50%,0)`);
+    bgX.fillStyle=ag;bgX.fill();bgX.restore();
+  }
+  for(const p of pts){
+    p.x+=p.vx;p.y+=p.vy;p.a+=p.da;
+    if(p.a<0||p.a>1)p.da*=-1;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    bgX.save();bgX.globalAlpha=p.a*.55;
+    bgX.beginPath();bgX.arc(p.x,p.y,p.r,0,Math.PI*2);
+    bgX.fillStyle=`hsl(${p.hue},70%,65%)`;bgX.fill();
+    bgX.globalAlpha=p.a*.18;bgX.beginPath();bgX.arc(p.x,p.y,p.r*4.5,0,Math.PI*2);
+    const pg=bgX.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4.5);
+    pg.addColorStop(0,`hsl(${p.hue},70%,65%)`);pg.addColorStop(1,'transparent');
+    bgX.fillStyle=pg;bgX.fill();bgX.restore();
+  }
+}
+
+// ─── GAME CANVAS ────────────────────────
+const gC=document.getElementById('game-canvas'),gX=gC.getContext('2d');
+let nodes=[],sphere=null,trail=[],zones=[],gT=0,tempPts=[];
+
+function initGame(){
+  const ctr=gC.parentElement,w=ctr.clientWidth;
+  const rows=9,cols=7,cW=w/(cols+1),cH=44,totalH=rows*cH+56;
+  gC.width=w;gC.height=totalH;gC.style.height=totalH+'px';
+  nodes=[];
+  for(let r=0;r<rows;r++){
+    const off=r%2===0?0:cW*.5;
+    for(let c=0;c<cols;c++){
+      if(r===0&&(c===0||c===cols-1))continue;
+      nodes.push({x:cW*(c+1)+off,y:cH*(r+.8)+18,r:4+Math.random()*3,ph:Math.random()*Math.PI*2,sp:.3+Math.random()*.7,hue:240+Math.random()*60,hit:0});
+    }
+  }
+  const zW=w/6;
+  zones=RARITIES.map((r,i)=>({x:zW*i,w:zW,r}));
+  sphere=null;trail=[];tempPts=[];
+  gameLoop();
+}
+
+function gameLoop(){
+  requestAnimationFrame(gameLoop);
+  gT+=.016;
+  const W=gC.width,H=gC.height;
+  gX.clearRect(0,0,W,H);
+
+  // Connections
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const n1=nodes[i],n2=nodes[j],dx=n1.x-n2.x,dy=n1.y-n2.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<85){gX.save();gX.globalAlpha=(1-d/85)*.13;gX.strokeStyle='rgba(168,85,247,.9)';gX.lineWidth=.5;gX.beginPath();gX.moveTo(n1.x,n1.y);gX.lineTo(n2.x,n2.y);gX.stroke();gX.restore();}
+  }
+
+  // Nodes
+  for(const n of nodes){
+    const pulse=Math.sin(gT*n.sp+n.ph)*.28+.72;
+    const gh=n.hit>0?Math.min(n.hit/20,1):0;
+    n.hit=Math.max(0,n.hit-1);
+    // Glow
+    gX.save();gX.globalAlpha=(.12+gh*.38)*pulse;
+    const ng=gX.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*5.5);
+    ng.addColorStop(0,gh>.5?'rgba(255,255,255,.5)':`hsl(${n.hue},70%,65%)`);ng.addColorStop(1,'transparent');
+    gX.fillStyle=ng;gX.beginPath();gX.arc(n.x,n.y,n.r*5.5,0,Math.PI*2);gX.fill();gX.restore();
+    // Crystal hex
+    gX.save();gX.globalAlpha=.72+gh*.28;gX.beginPath();
+    for(let s=0;s<6;s++){const a=(s/6)*Math.PI*2-Math.PI/6,r=n.r*(pulse*.12+.88)*(1+gh*.25);s===0?gX.moveTo(n.x+Math.cos(a)*r,n.y+Math.sin(a)*r):gX.lineTo(n.x+Math.cos(a)*r,n.y+Math.sin(a)*r);}
+    gX.closePath();
+    const fg=gX.createRadialGradient(n.x-n.r*.3,n.y-n.r*.3,0,n.x,n.y,n.r*1.5);
+    fg.addColorStop(0,'rgba(255,255,255,.9)');fg.addColorStop(.3,`hsl(${n.hue},70%,65%)`);fg.addColorStop(1,'rgba(0,0,0,.25)');
+    gX.fillStyle=fg;gX.fill();gX.strokeStyle='rgba(255,255,255,.25)';gX.lineWidth=.5;gX.stroke();gX.restore();
+  }
+
+  // Zone dividers
+  for(const z of zones){gX.save();gX.globalAlpha=.2;gX.strokeStyle=z.r.c;gX.lineWidth=.5;gX.setLineDash([3,4]);gX.beginPath();gX.moveTo(z.x,0);gX.lineTo(z.x,H-4);gX.stroke();gX.restore();}
+
+  // Temp particles
+  for(let i=tempPts.length-1;i>=0;i--){const p=tempPts[i];p.life--;p.x+=p.vx;p.y+=p.vy;p.vy+=.06;if(p.life<=0){tempPts.splice(i,1);continue;}gX.save();gX.globalAlpha=(p.life/p.maxLife)*.7;gX.beginPath();gX.arc(p.x,p.y,p.r*(p.life/p.maxLife),0,Math.PI*2);gX.fillStyle=p.color;gX.fill();gX.restore();}
+
+  // Sphere
+  if(sphere){
+    trail.push({x:sphere.x,y:sphere.y});
+    if(trail.length>28)trail.shift();
+    // Trail
+    for(let i=0;i<trail.length;i++){const t=trail[i],prog=i/trail.length;gX.save();gX.globalAlpha=prog*.45;gX.beginPath();gX.arc(t.x,t.y,sphere.r*prog*.75,0,Math.PI*2);const tg=gX.createRadialGradient(t.x,t.y,0,t.x,t.y,sphere.r*prog*.75);tg.addColorStop(0,'rgba(216,180,254,.8)');tg.addColorStop(1,'transparent');gX.fillStyle=tg;gX.fill();gX.restore();}
+    // Emit
+    if(Math.random()<.25)tempPts.push({x:sphere.x+(Math.random()-.5)*sphere.r,y:sphere.y+(Math.random()-.5)*sphere.r,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2-.5,r:Math.random()*2+.5,life:18,maxLife:18,color:`rgba(${168+~~(Math.random()*60)},${85+~~(Math.random()*40)},${247},0.8)`});
+    // Physics
+    sphere.vy+=.26;sphere.vx*=.996;sphere.x+=sphere.vx;sphere.y+=sphere.vy;
+    if(sphere.x-sphere.r<0){sphere.x=sphere.r;sphere.vx=Math.abs(sphere.vx)*.82;}
+    if(sphere.x+sphere.r>W){sphere.x=W-sphere.r;sphere.vx=-Math.abs(sphere.vx)*.82;}
+    // Node collisions
+    for(const n of nodes){const dx=sphere.x-n.x,dy=sphere.y-n.y,d=Math.sqrt(dx*dx+dy*dy),md=sphere.r+n.r+2;if(d<md&&d>0){n.hit=22;const nx=dx/d,ny=dy/d,ov=md-d;sphere.x+=nx*ov*.5;sphere.y+=ny*ov*.5;const dot=sphere.vx*nx+sphere.vy*ny;sphere.vx-=2*dot*nx*.68;sphere.vy-=2*dot*ny*.68;sphere.vx+=(Math.random()-.5)*1.1;sphere.vx*=.88;sphere.vy*=.86;}}
+    // Draw sphere
+    const sx=sphere.x,sy=sphere.y,sr=sphere.r;
+    gX.save();gX.globalAlpha=.28;const og=gX.createRadialGradient(sx,sy,0,sx,sy,sr*4.5);og.addColorStop(0,'rgba(168,85,247,.75)');og.addColorStop(1,'transparent');gX.fillStyle=og;gX.beginPath();gX.arc(sx,sy,sr*4.5,0,Math.PI*2);gX.fill();gX.restore();
+    gX.save();const sg=gX.createRadialGradient(sx-sr*.35,sy-sr*.35,sr*.04,sx,sy,sr);sg.addColorStop(0,'rgba(255,255,255,.95)');sg.addColorStop(.18,'rgba(216,180,254,.9)');sg.addColorStop(.5,'rgba(168,85,247,.82)');sg.addColorStop(.82,'rgba(109,40,217,.9)');sg.addColorStop(1,'rgba(46,16,101,.95)');gX.fillStyle=sg;gX.beginPath();gX.arc(sx,sy,sr,0,Math.PI*2);gX.fill();
+    gX.globalAlpha=.55;const spec=gX.createRadialGradient(sx-sr*.35,sy-sr*.4,0,sx-sr*.2,sy-sr*.2,sr*.5);spec.addColorStop(0,'rgba(255,255,255,.9)');spec.addColorStop(1,'transparent');gX.fillStyle=spec;gX.beginPath();gX.arc(sx,sy,sr,0,Math.PI*2);gX.fill();gX.restore();
+    // Landing check
+    if(sphere.y>H-16){const z=zones.find(z=>sphere.x>=z.x&&sphere.x<z.x+z.w)||zones[0];handleLand(z.r);}
+  }
+}
+
+function triggerDrop(){
+  if(S.dropping)return;S.dropping=true;
+  const btn=document.getElementById('drop-btn');
+  btn.disabled=true;
+  document.getElementById('drop-txt').textContent='DROPPING...';
+  const W=gC.width;
+  sphere={x:W*.2+Math.random()*W*.6,y:10,vx:(Math.random()-.5)*3.5,vy:.8,r:10};
+  trail=[];S.drops++;S.myDrops++;
+  ctr('st-drops',S.drops);
+  document.getElementById('p-drops').textContent=S.myDrops;
+}
+
+function handleLand(r){
+  sphere=null;trail=[];S.dropping=false;
+  const btn=document.getElementById('drop-btn');
+  btn.disabled=false;document.getElementById('drop-txt').textContent='START DROP';
+  const a=ASSETS[ri(ASSETS.length)];
+  const sc=score();
+  S.cur={...a,rarity:r,score:sc,mcap:mcap(),vol:vol()};
+  S.disc++;ctr('st-disc',S.disc);
+  if(r.label==='LEGENDARY'||r.label==='RARE')S.myRare++;
+  S.myScore+=sc;
+  document.getElementById('p-rare').textContent=S.myRare;
+  document.getElementById('p-score').textContent=S.myScore.toLocaleString();
+  addFeed(`${wallet()} discovered ${r.e} ${a.ticker}`,r.c);
+  showModal(S.cur);
+}
+
+// ─── MODAL ──────────────────────────────
+function showModal(a){
+  const ov=document.getElementById('modal-overlay');
+  ov.classList.add('active');
+  const badge=document.getElementById('m-badge');
+  badge.textContent=`${a.rarity.e} ${a.rarity.label}`;
+  badge.style.color=a.rarity.c;badge.style.borderColor=a.rarity.b;badge.style.background=a.rarity.bg;
+  document.getElementById('m-score-lbl').textContent=`Score: ${a.score.toLocaleString()}`;
+  document.getElementById('m-name').textContent=a.name;
+  document.getElementById('m-ticker').textContent=a.ticker;
+  document.getElementById('m-mcap').textContent=a.mcap;
+  document.getElementById('m-vol').textContent=a.vol;
+  document.getElementById('m-dscore').textContent=a.score.toLocaleString();
+  const mr=document.getElementById('m-rarity');mr.textContent=a.rarity.label;mr.style.color=a.rarity.c;
+  const orb=document.getElementById('m-orb');
+  orb.style.background=`radial-gradient(circle at 35% 35%,#fff,${a.color},#1a0533)`;
+  orb.style.boxShadow=`0 0 28px ${a.color}80,0 0 55px ${a.color}35`;
+  orb.innerHTML=`<div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.38),transparent 60%)"></div>`;
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('active');}
+function handleOverlayClick(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
+function claimAsset(){
+  if(!S.cur)return;
+  S.inv.unshift({...S.cur,at:Date.now()});
+  closeModal();renderInv();
+  addFeed(`You claimed ${S.cur.rarity.e} ${S.cur.ticker}`,S.cur.color,true);
+}
+
+// ─── NAV ────────────────────────────────
+function goTo(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.navitem').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const nav=document.getElementById('n-'+p);if(nav)nav.classList.add('active');
+  if(p==='inventory')renderInv();
+  if(p==='rankings')renderLb();
+  if(p==='discoveries')renderAll();
+  if(p==='profile')renderProfile();
+}
+
+// ─── FEED ───────────────────────────────
+const FEED_TEMPLATES=[
+  ()=>`${wallet()} discovered ${ASSETS[ri(ASSETS.length)].ticker}`,
+  ()=>`${wallet()} found ${rarity().e} LEGENDARY ${ASSETS[ri(ASSETS.length)].ticker}`,
+  ()=>`${wallet()} scored ${score().toLocaleString()}`,
+];
+const initFeedData=[
+  ['0xA7...D4F2 discovered ⚡ $WAVE','#38bdf8'],
+  ['0x51...9C1A found ⭐ LEGENDARY $NOVA','#fbbf24'],
+  ['0xD2...7B3E discovered 💎 $FLUX','#a78bfa'],
+  ['0xB4...2E5D claimed score 8,721','#a855f7'],
+  ['0xF9...A821 found 🔥 HOT $VOID','#f87171'],
+  ['0x3C...6F10 discovered 👁 $ECHO','#34d399'],
+];
+
+function addFeed(msg,color,own=false){
+  const feed=document.getElementById('feed');if(!feed)return;
+  const el=document.createElement('div');el.className='feed-item';
+  el.style.borderColor=own?'rgba(168,85,247,.28)':'rgba(168,85,247,.07)';
+  el.innerHTML=`<div style="width:26px;height:26px;border-radius:50%;background:${color||'#a855f7'}1e;border:1px solid ${color||'#a855f7'}40;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px">⚡</div><div style="flex:1;min-width:0"><div style="font-size:11.5px;color:rgba(233,213,255,.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${msg}</div><div style="font-size:10px;color:rgba(168,85,247,.38);margin-top:1px">just now</div></div>`;
+  feed.insertBefore(el,feed.firstChild);
+  while(feed.children.length>18)feed.removeChild(feed.lastChild);
+}
+
+// ─── COUNTERS ───────────────────────────
+function ctr(id,target){
+  const el=document.getElementById(id);if(!el)return;
+  const cur=parseInt(el.textContent.replace(/,/g,''))||0;
+  const diff=target-cur;if(!diff)return;
+  let t=0;const steps=36;
+  const iv=setInterval(()=>{
+    t++;const e=1-Math.pow(1-t/steps,3);
+    el.textContent=Math.round(cur+diff*e).toLocaleString();
+    if(t>=steps){el.textContent=target.toLocaleString();clearInterval(iv);}
+  },600/steps);
+}
+
+// ─── INVENTORY ──────────────────────────
+function renderInv(){
+  const g=document.getElementById('inv-grid'),em=document.getElementById('inv-empty');
+  if(S.inv.length===0){g.style.display='none';em.style.display='block';return;}
+  em.style.display='none';g.style.display='grid';g.innerHTML='';
+  S.inv.forEach(a=>{
+    const el=document.createElement('div');el.className='acard';
+    el.innerHTML=`<div style="width:42px;height:42px;border-radius:11px;background:radial-gradient(circle at 35% 35%,#fff,${a.color},#1a0533);margin-bottom:9px;box-shadow:0 0 14px ${a.color}50"></div><div class="hd" style="font-size:14px;font-weight:700;color:#e9d5ff;margin-bottom:2px">${a.name}</div><div style="font-size:11px;color:rgba(216,180,254,.4);font-family:monospace">${a.ticker}</div><div style="margin-top:7px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:9.5px;color:${a.rarity.c};font-weight:700;font-family:'Space Grotesk',sans-serif">${a.rarity.e} ${a.rarity.label}</span><span style="font-size:9.5px;color:rgba(216,180,254,.38)">${a.mcap}</span></div>`;
+    g.appendChild(el);
+  });
+}
+
+// ─── LEADERBOARD ────────────────────────
+function renderLb(){
+  const lb=document.getElementById('lb');lb.innerHTML='';lb.className='stagger';
+  const medals=['🥇','🥈','🥉'];
+  LEADERS.forEach((l,i)=>{
+    const el=document.createElement('div');el.className='lcard';
+    const bc=i===0?'rgba(251,191,36,.28)':i===1?'rgba(148,163,184,.22)':i===2?'rgba(251,146,60,.22)':'rgba(168,85,247,.11)';
+    el.style.borderColor=bc;
+    el.innerHTML=`<div class="hd" style="font-size:17px;width:28px;text-align:center;flex-shrink:0">${i<3?medals[i]:'#'+(i+1)}</div><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1e1147,#2d1b69);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid rgba(168,85,247,.28)">👤</div><div style="flex:1;min-width:0"><div style="font-family:monospace;font-size:12.5px;color:#e9d5ff;font-weight:600">${l.w}</div><div style="font-size:10.5px;color:rgba(216,180,254,.38);margin-top:2px">${l.d.toLocaleString()} drops · ${l.r} rare</div></div><div class="hd" style="font-size:13px;font-weight:700;color:${i<3?'#fbbf24':'#a855f7'};text-align:right;flex-shrink:0">${l.s.toLocaleString()}<div style="font-size:8.5px;color:rgba(216,180,254,.35);font-weight:500">SCORE</div></div>`;
+    lb.appendChild(el);
+  });
+}
+
+// ─── ALL ASSETS ─────────────────────────
+function renderAll(){
+  const c=document.getElementById('all-assets');c.innerHTML='';c.className='stagger';
+  ASSETS.forEach(a=>{
+    const r=rarity();const el=document.createElement('div');el.className='acard';
+    el.style.display='flex';el.style.alignItems='center';el.style.gap='11px';
+    el.innerHTML=`<div style="width:42px;height:42px;border-radius:11px;background:radial-gradient(circle at 35% 35%,#fff,${a.color},#1a0533);flex-shrink:0;box-shadow:0 0 14px ${a.color}45"></div><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><span class="hd" style="font-size:14.5px;font-weight:700;color:#e9d5ff">${a.name}</span><span style="font-size:9.5px;color:${r.c};font-weight:700;font-family:'Space Grotesk',sans-serif">${r.e} ${r.label}</span></div><div style="font-size:11.5px;color:rgba(216,180,254,.38)">${a.desc}</div></div><div style="text-align:right;flex-shrink:0"><div class="hd" style="font-size:12.5px;font-weight:700;color:#e9d5ff">${mcap()}</div><div style="font-size:9.5px;color:rgba(216,180,254,.38)">mkt cap</div></div>`;
+    c.appendChild(el);
+  });
+}
+
+// ─── PROFILE ────────────────────────────
+const achState={first_drop:false,rare_hunter:false,legendary:false,explorer:false,on_fire:false};
+function renderProfile(){
+  if(S.myDrops>0)achState.first_drop=true;
+  if(S.myRare>0)achState.rare_hunter=true;
+  if(S.myDrops>=3)achState.on_fire=true;
+  if(S.inv.length>=5)achState.explorer=true;
+  const c=document.getElementById('achs');c.innerHTML='';c.className='stagger';
+  ACHIEV_DEF.forEach(a=>{
+    const unlocked=achState[a.id];
+    const el=document.createElement('div');el.className='achiev';el.style.opacity=unlocked?'1':'.38';
+    el.innerHTML=`<div style="width:38px;height:38px;border-radius:9px;background:${unlocked?'rgba(168,85,247,.14)':'rgba(255,255,255,.04)'};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border:1px solid ${unlocked?'rgba(168,85,247,.28)':'rgba(255,255,255,.07)'}">${a.icon}</div><div style="flex:1"><div class="hd" style="font-size:12.5px;font-weight:600;color:${unlocked?'#e9d5ff':'rgba(216,180,254,.4)'}">${a.t}</div><div style="font-size:11px;color:rgba(216,180,254,.32);margin-top:1px">${a.d}</div></div>${unlocked?'<div style="color:#a855f7;font-size:15px">✓</div>':''}`;
+    c.appendChild(el);
+  });
+}
+
+// ─── LIVE UPDATES ───────────────────────
+setInterval(()=>{
+  const r=rarity();addFeed(FEED_TEMPLATES[ri(3)](),r.c);
+  if(Math.random()<.4){S.drops+=ri(3)+1;ctr('st-drops',S.drops);}
+  if(Math.random()<.3){S.disc+=1;ctr('st-disc',S.disc);}
+  S.online=Math.max(800,Math.min(1200,S.online+ri(8)-3));
+  document.getElementById('st-online').textContent=S.online.toLocaleString();
+},3800);
+
+// ─── INIT ───────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  initBg();drawBg();
+  initGame();
+  initFeedData.forEach(([m,c])=>addFeed(m,c));
+  ctr('st-drops',S.drops);
+  setTimeout(()=>ctr('st-disc',S.disc),180);
+  setTimeout(()=>{document.getElementById('st-online').textContent=S.online.toLocaleString();},360);
+  renderInv();
+});
+window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(()=>{initBg();initGame();},220);},{passive:true});
+document.body.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+</script>
+</body>
+</html>
